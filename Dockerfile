@@ -33,7 +33,7 @@ RUN pip install ray[rllib]
 # MINERL stuff
 RUN add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update
-RUN apt-get install openjdk-8-jdk
+RUN apt-get install openjdk-8-jdk -y
 RUN pip install --upgrade minerl
 
 # Allow render from container
@@ -50,6 +50,7 @@ RUN pip install -r /home/MineRL/requirements.txt
 COPY ./ /home/MineRL
 WORKDIR /home/MineRL
 RUN python setup.py develop
+RUN export MINERL_DATA_ROOT='/workspaces/MineRL/data'
 
 # script entry
 ENTRYPOINT python /home/ray/python/ray/setup-dev.py --yes && /bin/bash

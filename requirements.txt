@@ -1,0 +1,4 @@
+# Requirements
+gym
+numpy
+pyyaml
