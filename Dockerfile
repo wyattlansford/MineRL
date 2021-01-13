@@ -50,7 +50,7 @@ RUN pip install -r /home/MineRL/requirements.txt
 COPY ./ /home/MineRL
 WORKDIR /home/MineRL
 RUN python setup.py develop
-RUN export MINERL_DATA_ROOT='/workspaces/MineRL/data'
+RUN export MINERL_DATA_ROOT='/workspaces/MineRL/MineRL/data/'
 
 # script entry
 ENTRYPOINT python /home/ray/python/ray/setup-dev.py --yes && /bin/bash

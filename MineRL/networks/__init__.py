@@ -1,4 +1,1 @@
-from MineRL.networks import baseline
-
-def register():
-    baseline.register()
+from .baseline import CNNLSTM

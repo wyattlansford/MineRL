@@ -48,7 +48,6 @@ def main():
         actions = np.stack(actions)
         print('computing k-means...')
         kmeans = KMeans(n_clusters=args.num_actions, verbose=1, random_state=0).fit(actions)
-        print(kmeans)
         np.save(file, kmeans.cluster_centers_)
 
 
