@@ -23,11 +23,11 @@ class CNNLSTM(TorchModelV2, nn.Module):
             nn.ReLU(),
             nn.Conv2d(64, 128, 4, 4),
             nn.ReLU(),
-            nn.Conv2d(128, EMBED_SIZE, 4, 4),
+            nn.Conv2d(128, 256, 4, 4),
             nn.ReLU(),
         )
         self._inventory = nn.Sequential(
-            nn.Linear(64, EMBED_SIZE),
+            nn.Linear(64, 256),
             nn.LeakyReLU()
         )
         
@@ -38,12 +38,10 @@ class CNNLSTM(TorchModelV2, nn.Module):
         #     nn.Linear(1, EMBED_SIZE),
         #     nn.Tanh(),
         # )
-        self.body = nn.LSTM(int(EMBED_SIZE*2), EMBED_SIZE, LSTM_LAYERS)
+        self.body = nn.LSTM(512, 256, batch_first=True)
 
-        self._value_head = nn.Linear(EMBED_SIZE, 1)
-        print("action_space")
-        print(action_space.n)
-        self._policy_head = nn.Linear(EMBED_SIZE, action_space.n)
+        self._value_head = nn.Linear(256, 1)
+        self._policy_head = nn.Linear(256, 256)
 
 
     def value_function(self):
@@ -87,11 +85,10 @@ class CNNLSTM(TorchModelV2, nn.Module):
         else:
 
             lstm_out, lstm_state = self.body(body_inputs, state)
-
-        self._logits = torch.reshape(lstm_out, (batch_t * batch_n, self.body.hidden_size))
+        self._logits = torch.reshape(lstm_out, (32, 256))
 
         outputs = self._policy_head(self._logits)
- 
+        lstm_state = [x.permute(1, 0, 2) for x in lstm_state]
         return outputs, lstm_state
 
     def get_initial_state(self):
