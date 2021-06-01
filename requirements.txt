@@ -3,3 +3,6 @@ gym
 numpy
 pyyaml
 sklearn
+ray
+minerl
+tqdm
